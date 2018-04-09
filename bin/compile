@@ -155,10 +155,14 @@ PATH="$METEOR_DIR/.meteor:`dirname $METEOR_NPM`:$COMPILE_DIR/bin:$PATH"
 echo "-----> Using node: `$NODE --version`"
 echo "----->    and npm: `$METEOR_NPM --version`"
 
+# Install yarn globally.
+$METEOR_NPM install -g yarn
+echo "-----> Using yarn: `METEOR yarn --version`"
+
 # If we use npm on root, run npm install.  Don't use `--production` here, as we
 # may need devDependencies (e.g. webpack) in order to build the meteor app.
 if [ -e "$APP_SOURCE_DIR"/package.json ]; then
-  $METEOR_NPM install
+  METEOR yarn
 fi
 
 # Related to https://github.com/meteor/meteor/issues/2796 and 
@@ -190,7 +194,7 @@ rmdir $BUNDLE_DEST
 echo "-----> Installing npm production dependencies on built slug"
 if [ -e "$COMPILE_DIR"/app/programs/server/package.json ]; then
   cd "$COMPILE_DIR"/app/programs/server
-  $METEOR_NPM install --production
+  METEOR yarn --production
   cd "$APP_SOURCE_DIR"
 fi
 
